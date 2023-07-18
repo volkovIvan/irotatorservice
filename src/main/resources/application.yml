@@ -1,0 +1,23 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+  cloud:
+    azure:
+      keyvault:
+        secret:
+          property-source-enabled: true
+          property-sources:
+            - name: ${KEY_VAULT_PROPERTY_SOURCE_NAME}
+              endpoint: ${KEY_VAULT_PROPERTY_SOURCE_ENDPOINT}
+      servicebus:
+        namespace: ${irotator-service-bus-namespace}
+        connection-string: ${irotator-service-bus-connection-string}
+      cosmos:
+        endpoint: ${irotator-cosmos-endpoint}
+        key: ${irotator-cosmos-key}
+        database: ${irotator-cosmos-database}
+      storage:
+        blob:
+          container-name: ${irotator-blob-storage-container}
+          connection-string: ${irotator-blob-storage-connection-string}
