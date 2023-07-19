@@ -24,17 +24,20 @@ public class FileRotatorServiceImpl implements FileRotatorService {
 
     @Override
     public void rotateAndSaveFileFromTask(TaskDto taskDto) throws IOException {
+        Task task = new Task();
+        task.setId(taskDto.getId());
+        task.setFileName(taskDto.getFileName());
+        task.setOriginalFilePath(taskDto.getOriginalFilePath());
+        task.setProcessedFilePath(taskDto.getProcessedFilePath());
+        task.setState(TaskState.IN_PROGRESS);
+        task = taskRepository.save(task);
         byte[] imageBytes = this.azureBlobService.downloadInitialImage(taskDto.getFileName());
         String[] splitFileName = this.splitFileName(taskDto.getFileName());
         byte[] rotatedImageBytes = this.rotateImage(imageBytes, splitFileName[1]);
         String rotatedFileName = this.getRotatedFileName(splitFileName);
         String rotatedFilePath = this.azureBlobService.uploadProcessedImage(new ByteArrayInputStream(rotatedImageBytes), rotatedFileName);
-        Task task = new Task();
-        task.setId(taskDto.getId());
-        task.setFileName(taskDto.getFileName());
-        task.setOriginalFilePath(task.getOriginalFilePath());
-        task.setProcessedFilePath(rotatedFilePath);
         task.setState(TaskState.DONE);
+        task.setProcessedFilePath(rotatedFilePath);
         taskRepository.save(task);
     }
 
@@ -64,12 +67,12 @@ public class FileRotatorServiceImpl implements FileRotatorService {
         // Rotating image by degrees using toradians()
         // method
         // and setting new dimension t it
-        g2.rotate(Math.toRadians(90), width / 2,
+        g2.rotate(Math.toRadians(180), width / 2,
                 height / 2);
         g2.drawImage(img, null, 0, 0);
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(img, extension, baos);
+        ImageIO.write(newImage, extension, baos);
         return baos.toByteArray();
     }
 }
