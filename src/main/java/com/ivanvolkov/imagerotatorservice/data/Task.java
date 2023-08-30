@@ -1,25 +1,29 @@
 package com.ivanvolkov.imagerotatorservice.data;
 
-import com.azure.spring.data.cosmos.core.mapping.Container;
-import com.azure.spring.data.cosmos.core.mapping.GeneratedValue;
-import com.azure.spring.data.cosmos.core.mapping.PartitionKey;
-import lombok.Data;
-import org.springframework.data.annotation.Id;
+import lombok.*;;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbAttribute;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbBean;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbConvertedBy;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.DynamoDbPartitionKey;
 
-@Container(containerName = "tasks")
-@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Setter
+@DynamoDbBean
 public class Task {
 
-    @PartitionKey
-    @Id
-    @GeneratedValue
+    @Getter(onMethod = @__({@DynamoDbPartitionKey}))
     private String id;
 
+    @Getter(onMethod = @__({@DynamoDbAttribute("fileName")}))
     private String fileName;
 
+    @Getter(onMethod = @__({@DynamoDbAttribute("originalFilePath")}))
     private String originalFilePath;
 
+    @Getter(onMethod = @__({@DynamoDbAttribute("processedFilePath")}))
     private String processedFilePath;
 
+    @Getter(onMethod = @__({@DynamoDbAttribute("state"), @DynamoDbConvertedBy(TaskStateEnumDynamoConverter.class)}))
     private TaskState state;
 }

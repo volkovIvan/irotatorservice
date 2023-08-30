@@ -1,22 +1,13 @@
 spring:
+  cloud:
+    aws:
+      region:
+        static: eu-central-1
+      dynamodb:
+        endpoint: ${DYNAMO_DB_ENDPOINT}
   servlet:
     multipart:
-      max-file-size: 5MB
-  cloud:
-    azure:
-      keyvault:
-        secret:
-          property-source-enabled: true
-          property-sources:
-            - name: ${KEY_VAULT_PROPERTY_SOURCE_NAME}
-              endpoint: ${KEY_VAULT_PROPERTY_SOURCE_ENDPOINT}
-      servicebus:
-        namespace: ${irotator-service-bus-namespace}
-      cosmos:
-        endpoint: ${irotator-cosmos-endpoint}
-        key: ${irotator-cosmos-key}
-        database: ${irotator-cosmos-database}
-      storage:
-        blob:
-          container-name: ${irotator-blob-storage-container}
-          account-name: ${irotator-blob-storage-account-name}
+      max-file-size: 4MB
+aws:
+  bucket-name: ${BUCKET_NAME}
+  task-queue-sqs: ${TASK_QUEUE_SQS}
